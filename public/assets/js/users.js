@@ -31,3 +31,14 @@ $('#avatar').on('change',function(){
         }
     });
 })
+$.ajax({
+    type: "get",
+    url: "/users",
+    success: function (response) {
+      var html=template('usersTpl',{
+          data:response
+      })
+    //   console.log(html);
+      $('#userlist').html(html);
+    }
+});
