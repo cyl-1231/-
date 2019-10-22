@@ -15,8 +15,23 @@ $('#userForm').on('submit',function(){
     })
     return false;
 })
-$('#avatar').on('change',function(){
-    console.log($(this)[0].files[0]);
+// $('#avatar').on('change',function(){
+//     console.log($(this)[0].files[0]);
+//     var formData=new FormData();
+//     formData.append('avatar',$(this)[0].files[0])
+//     $.ajax({
+//         type: "post",
+//         url: "/upload",
+//         data: formData,
+//         processData:false,
+//         contentType:false,
+//         success: function (response) {
+//             $('#preview').attr('src',response[0].avatar);
+//             $('#hiddenAvatar').val(response[0].avatar)
+//         }
+//     });
+// })
+$('#modifyuser').on('change','#avatar',function(){
     var formData=new FormData();
     formData.append('avatar',$(this)[0].files[0])
     $.ajax({
@@ -42,3 +57,37 @@ $.ajax({
       $('#userlist').html(html);
     }
 });
+$('#userlist').on('click','.edit',function(){
+  var id=  $(this).attr('data-id')
+    // 根据id获取用户详细信息
+    $.ajax({
+        type:'get',
+        url:'/users/'+id,
+        data:id,
+        success:function(response){
+            console.log(response);
+          var html= template('modifyTpl',response)   
+            $('#modifyuser').html(html)
+        }
+    })
+})
+$('#modifyuser').on('submit','#userForm',function(){
+//   console.log($(this).serialize());
+  var formdata=$(this).serialize();
+  console.log(formdata);
+  
+  var id=$(this).attr('data-id');
+//   console.log(id);
+  
+  $.ajax({
+      type:'put',
+      url:'/users/'+id,
+      data:formdata,
+      success:function(response){
+    //    location.reload()
+       console.log(response);
+       
+      }
+  })
+    return false;
+})
