@@ -103,3 +103,45 @@ $('#userlist').on('click','.delete',function(){
              }
         })
 })
+// 复选框按钮
+$('#checkall').on('change',function(){
+  var status=$(this).prop('checked')
+  // console.log(status);
+  $('#userlist').find('input').prop('checked',status);
+  if(status){
+    $('#deletemany').show()
+  }else{
+    $('#deletemany').hide()
+  }
+})
+$('#userlist').on('click','.userstatus',function(){
+      var inputs=$('#userlist').find('input');
+      // console.log(inputs);
+      if(inputs.length==inputs.filter(':checked').length){
+        $('#checkall').prop('checked',true)
+      }else{
+        $('#checkall').prop('checked',false)
+      }
+      if(inputs.filter(':checked').length>0){
+        $('#deletemany').show()
+      }else{
+        $('#deletemany').hide()
+      }
+})
+$('#deletemany').on('click',function(){
+  var ids=[];
+ var checkuser= $('#userlist').find('input').filter(':checked');
+  checkuser.each(function(index,element){
+    // id.push($element).attr('data-id')
+    ids.push($(element).attr('data-id'));
+  })
+  if(confirm('您真要确定要进行批量删除操作吗')){
+    $.ajax({
+			type: 'delete',
+			url: '/users/' + ids.join('-'),
+			success: function () {
+				location.reload();
+			}
+		})
+  }
+})
