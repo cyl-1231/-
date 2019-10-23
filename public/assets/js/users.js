@@ -91,3 +91,15 @@ $('#modifyuser').on('submit','#userForm',function(){
   })
     return false;
 })
+
+$('#userlist').on('click','.delete',function(){
+        var id=$(this).attr('data-id'); 
+        if(confirm('你确定要删除吗?'))
+        $.ajax({
+            type:'delete',
+            url:'/users/'+id,
+            success:function () { 
+                location.reload()
+             }
+        })
+})
